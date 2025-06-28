@@ -1,0 +1,123 @@
+
+Example 1: Use Trapezoidal rule to estimate the integral integrate e ^ x dx from 0 to 1 dx, taking 5 intervals.
+kill(all)$
+numer:true$
+fpprintprec:4$
+
+/* Define function */
+f(x) := exp(x)$
+
+/* Lower and upper limits */
+x0: 0$
+xn: 1$
+n: 5$ /* Number of intervals */
+h: (xn - x0) / n$
+
+/* Arrays for x and y */
+array(x, n+1)$
+array(y, n+1)$
+
+s: 0$
+
+/* Compute x[i] and y[i] = f(x[i]) */
+for i:0 thru n do (
+  x[i]: x0 + i*h,
+  y[i]: f(x[i]),
+  print("x[", i, "] = ", x[i], " , y[", i, "] = ", y[i])
+)$
+
+/* Sum of middle y[i] terms */
+for i:1 thru n-1 do (
+  s: s + y[i]
+)$
+
+/* Trapezoidal Rule */
+I: (h/2)*(y[0] + y[n] + 2*s)$
+
+print("The value of the integral using Trapezoidal Rule is: ", I)$
+
+
+ Example 3: Use Simpson's 1/3 Rule to estimate the integral
+∫0111+𝑥2 𝑑𝑥∫ 011+x 2 1​dxusing 7 ordinates (i.e., n = 6 sub-intervals):
+kill(all)$
+
+numer:true$
+fpprintprec:4$
+
+/* Define function */
+f(x) := 1 / (1 + x^2)$
+
+/* Integration limits and sub-intervals */
+x0: 0$
+xn: 1$
+n: 6$  /* n must be even for Simpson's 1/3 Rule */
+h: (xn - x0) / n$
+
+/* Arrays for x and y */
+array(x, n+1)$
+array(y, n+1)$
+
+s1: 0$
+s2: 0$
+
+/* Compute x[i] and y[i] */
+for i: 0 thru n do (
+  x[i]: x0 + i * h,
+  y[i]: f(x[i]),
+  print("x[", i, "] = ", x[i], " , y[", i, "] = ", y[i])
+)$
+
+/* Apply Simpson's 1/3 rule */
+for i: 1 thru n - 1 do (
+  if remainder(i, 2) = 0 then s2: s2 + y[i] else s1: s1 + y[i]
+)$
+
+I: (h / 3) * (y[0] + y[n] + 4 * s1 + 2 * s2)$
+
+print("The value of the integral using Simpson's 1/3 Rule is", I)$
+
+/* Exact value */
+I_exact: integrate(f(x), x, x0, xn)$
+print("Exact value of the integral is", float(I_exact))$
+
+7.7 Weddle's Rule:
+
+Example 7: Use Weddle's rule to evaluate the integral fo ex dx, taking 6 intervals.
+kill(all)$
+
+numer:true$
+fpprintprec:4$
+
+/* Define function */
+f(x) := exp(-x^2)$
+
+/* Integration limits and number of intervals (must be multiple of 6) */
+x0: 0$
+xn: 0.6$
+n: 6$
+h: (xn - x0) / n$
+
+/* Arrays */
+array(x, n+1)$
+array(y, n+1)$
+
+/* Generate x and y values */
+for i:0 thru n do (
+    x[i]: x0 + i*h,
+    y[i]: f(x[i]),
+    print("x[", i, "] = ", x[i], " ; y[", i, "] = ", y[i])
+)$
+
+/* Apply Weddle's Rule (valid only when n is multiple of 6) */
+I: 0$
+for i:0 thru (n-6) step 6 do (
+    I: I + (3*h/10)*(y[i] + 5*y[i+1] + y[i+2] + 6*y[i+3] + y[i+4] + 5*y[i+5] + y[i+6])
+)$
+
+print("The value of the given integral using Weddle's Rule is", I)$
+
+/* Exact solution using definite integral */
+I_exact: integrate(f(x), x, x0, xn)$
+print("Exact solution of the integral is", float(I_exact))$
+
+
